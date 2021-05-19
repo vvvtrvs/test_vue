@@ -1,93 +1,234 @@
 <template>
-  <v-layout column justify-center align-center>
-    <v-flex xs12 sm8 md6>
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation </a
-            >.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
+  <v-container fluid class="pa-0 ma-0">
+    <v-row no-gutters class="cyan">
+      <hero-section class="px-12 py-8 text-center text-sm-left">
+        <template v-slot:heading>
+          <h1 class="">GagaKing讓你<br />無需佣金租買靚盤！</h1>
+        </template>
+
+        <template v-slot:img>
+          <v-responsive aspect-ratio="1">
+            <v-sheet class="white fill-height text-center align-center">
+            </v-sheet>
+          </v-responsive>
+        </template>
+
+        <template v-slot:body>
+          <h5 class="mb-2">GagaKing讓你無需佣金租買靚盤！</h5>
+          <v-btn
+            @click.stop=""
+            class="my-1 px-5"
+            elevation="0"
+            color="primary"
+            rounded
+            >放盤
+            <v-icon>mdi-arrow-right</v-icon>
+          </v-btn>
           <br />
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
+          <v-btn
+            @click.stop=""
+            class="my-1 px-5"
+            outlined
+            color="primary"
+            rounded
           >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
+            搵樓
+            <v-icon>mdi-arrow-right</v-icon>
+          </v-btn>
+        </template>
+      </hero-section>
+    </v-row>
+
+    <v-row
+      no-gutters
+      v-for="(section, i) in sections"
+      :key="i"
+      :class="section.background"
+    >
+      <hero-section
+        :class="[
+          'px-12',
+          'py-8',
+          'text-center',
+          { 'text-sm-left': !!section.image }
+        ]"
+        reverse
+        :wide="!!section.image"
+      >
+        <template v-slot:heading>
+          <h1 class="">{{ section.heading }}</h1>
+        </template>
+
+        <template v-slot:img>
+          <v-img
+            class="fill-height"
+            :src="section.image"
+            aspect-ratio="1"
+            contain
+            v-if="!!section.image"
+          >
+          </v-img>
+        </template>
+
+        <template v-slot:body>
+          <v-list dense flat disabled class="d-inline-block text-left">
+            <v-list-item v-for="(item, i) in section.items" :key="i">
+              <v-list-item-icon class="mr-3">
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.text"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <br />
+          <v-btn
+            @click.stop=""
+            class="my-1 px-5"
+            outlined
+            color="primary"
+            rounded
+            v-if="section.action"
+          >
+            {{ section.action }}
+            <v-icon>mdi-arrow-right</v-icon>
+          </v-btn>
+        </template>
+      </hero-section>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import Logo from "~/components/Logo.vue";
-import VuetifyLogo from "~/components/VuetifyLogo.vue";
-
+import HeroSection from "~/components/HeroSection.vue";
 export default {
-  components: {
-    Logo,
-    VuetifyLogo,
+  components: { HeroSection },
+  computed: {
+    xs() {
+      return this.$vuetify.breakpoint.name == "xs";
+    }
   },
+  data() {
+    return {
+      sections: [
+        {
+          background: "light-grey",
+          heading: "傾好價 點簽合約？",
+          image: "section1.png",
+          items: [
+            {
+              icon: "mdi-magnify",
+              text: "免費合約下載 唔洗四圍搵"
+            },
+            {
+              icon: "mdi-phone-outline",
+              text: "精選律師樓 「佢幫到你」"
+            },
+            {
+              icon: "mdi-magnify",
+              text: "填寫租約 「佢幫到你」"
+            }
+          ],
+          action: "下載免費合約"
+        },
+        {
+          shade: false,
+          heading: "傾好價 點簽合約？",
+          image: "section2.png",
+          items: [
+            {
+              icon: "mdi-magnify",
+              text: "免費合約下載 唔洗四圍搵"
+            },
+            {
+              icon: "mdi-phone-outline",
+              text: "精選律師樓 「佢幫到你」"
+            },
+            {
+              icon: "mdi-magnify",
+              text: "填寫租約 「佢幫到你」"
+            }
+          ],
+          action: "下載免費合約"
+        },
+        {
+          background: "light-grey",
+          heading: "傾好價 點簽合約？",
+          image: "section3.png",
+          items: [
+            {
+              icon: "mdi-magnify",
+              text: "免費合約下載 唔洗四圍搵"
+            },
+            {
+              icon: "mdi-phone-outline",
+              text: "精選律師樓 「佢幫到你」"
+            },
+            {
+              icon: "mdi-magnify",
+              text: "填寫租約 「佢幫到你」"
+            }
+          ],
+          action: "下載免費合約"
+        },
+        {
+          background: "light-grey",
+          heading: "傾好價 點簽合約？",
+          image: "section4.png",
+          items: [
+            {
+              icon: "mdi-magnify",
+              text: "免費合約下載 唔洗四圍搵"
+            },
+            {
+              icon: "mdi-phone-outline",
+              text: "精選律師樓 「佢幫到你」"
+            },
+            {
+              icon: "mdi-magnify",
+              text: "填寫租約 「佢幫到你」"
+            }
+          ],
+          action: "下載免費合約"
+        },
+        {
+          background: "background2", // no idea what the color/pattern is called
+          heading: "傾好價 點簽合約？",
+          items: [
+            {
+              icon: "mdi-magnify",
+              text: "免費合約下載 唔洗四圍搵"
+            },
+            {
+              icon: "mdi-phone-outline",
+              text: "精選律師樓 「佢幫到你」"
+            },
+            {
+              icon: "mdi-magnify",
+              text: "填寫租約 「佢幫到你」"
+            }
+          ]
+        }
+      ]
+    };
+  }
 };
 </script>
+
+<style scoped>
+h1 {
+  letter-spacing: 0.1em;
+}
+.v-btn--outlined {
+  background-color: white;
+}
+.v-list {
+  background: none;
+}
+.light-grey {
+  background-color: #f4f3f8;
+}
+.background2 {
+  background-color: #d1f1ff;
+}
+</style>
